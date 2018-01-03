@@ -51,6 +51,9 @@ apt-get -y install software-properties-common
 apt-add-repository -y ppa:bitcoin/bitcoin
 ```
 ```
+apt-get -y update
+```
+```
 apt-get -y install \
     wget \
     git \
@@ -130,10 +133,10 @@ polisd &
 apt-get -y install virtualenv python-pip
 ```
 ```
-git clone https://github.com/polispay/sentinel /sentinel
+git clone https://github.com/polispay/sentinel /root/sentinel
 ```
 ```
-cd /sentinel
+cd /root/sentinel
 ```
 ```
 virtualenv venv
