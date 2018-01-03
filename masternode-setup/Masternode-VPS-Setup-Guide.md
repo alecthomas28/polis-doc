@@ -37,21 +37,122 @@
 
 1. Log into your VPS
    - Windows users [follow this guide](https://www.digitalocean.com/community/tutorials/how-to-log-into-your-droplet-with-putty-for-windows-users) to log into your VPS.
-2. Copy/paste command into the VPS and hit enter: (For this step you will need your `private key` 
-   generated at step 5 above and your VPS IP address)
+2. Copy/paste these commands into the VPS and hit enter: (One Box At A Time)
 ```
-wget https://github.com/polispay/polis-doc/masternode-setup/blob/master/install_masternode.sh && chmod +x install_masternode.sh && ./install_masternode.sh
+apt-get -y update
 ```
-3. When prompted, enter your private key from before.
-4. You will be asked for your VPS IP and a few other questions.
-5. The installation should finish successfully. 
-6. Copy command to source alias
 ```
-source ~/.bash_aliases
+apt-get -y upgrade
 ```
-Your poliscore (`polisd`) should be up and running by now.
-7.Use `polis-cli getinfo` to check and wait til it's synced 
-  (look for blocks number and compare with block explorer http://polispay.org:3001/ )
+```
+apt-get -y install software-properties-common
+```
+```
+apt-add-repository -y ppa:bitcoin/bitcoin
+```
+```
+apt-get -y install \
+    wget \
+    git \
+    unzip \
+    libevent-dev \
+    libboost-dev \
+    libboost-chrono-dev \
+    libboost-filesystem-dev \
+    libboost-program-options-dev \
+    libboost-system-dev \
+    libboost-test-dev \
+    libboost-thread-dev \
+    libdb4.8-dev \
+    libdb4.8++-dev \
+    libminiupnpc-dev \
+    build-essential \
+    libtool \
+    autotools-dev \
+    automake \
+    pkg-config \
+    libssl-dev \
+    libevent-dev \
+    bsdmainutils \
+    libzmq3-dev \
+    nano
+```
+```
+wget https://github.com/polispay/polis/releases/download/v1.2.0/poliscore-1.2.0-linux.zip
+```
+```
+unzip poliscore-1.2.0-linux.zip
+```
+```
+rm poliscore-1.2.0-linux.zip
+```
+```
+cp poliscore-1.2.0-linux/usr/local/bin/polis{d,-cli} /usr/local/bin
+```
+```
+cd
+```
+```
+mkdir -p .poliscore
+```
+```
+nano .poliscore/polis.conf
+```
+```
+rpcuser=randuser43897ty8943
+rpcpassword=passhf95uiygr5308h08r3h0249fbgh7389h973
+rpcallowip=127.0.0.1
+listen=1
+server=1
+daemon=0
+logtimestamps=1
+maxconnections=256
+externalip=VPS_IP_ADDRESS
+masternodeprivkey=WALLET_GENKEY
+masternode=1
+connect=35.227.49.86:24126
+connect=192.243.103.182:24126
+connect=185.153.231.146:24126
+connect=91.223.147.100:24126
+connect=96.43.143.93:24126
+connect=104.236.147.210:24126
+connect=159.89.137.114:24126
+connect=159.89.139.41:24126
+connect=174.138.70.155:24126
+connect=174.138.70.16:24126
+connect=45.55.247.25:24126
+```
+CTRL X - To Save
+```
+polisd &
+```
+```
+apt-get -y install virtualenv python-pip
+```
+```
+git clone https://github.com/polispay/sentinel /sentinel
+```
+```
+cd /sentinel
+```
+```
+virtualenv venv
+```
+```
+. venv/bin/activate
+```
+```
+pip install -r requirements.txt
+```
+```
+crontab -e
+```
+```
+* * * * * cd /root/sentinel && ./venv/bin/python bin/sentinel.py >/dev/null 2>&1
+```
+
+3.Use `watch polis-cli getinfo` to check and wait til it's synced 
+  (look for blocks number and compare with block explorer http://block.polispay.org/ )
 
 
 ## Cold Wallet Setup Part 2 
@@ -81,8 +182,5 @@ mn1 1.2.3.4:24126 3xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 12345678xxxxxxxxxxx
 8. Go to the "Masternodes" tab
 9. Click "Start All"
 10. You will see "WATCHDOG_EXPIRED". Just wait few minutes
-
-Congratulations, your setup should now be complete! If you did like it, you can buy me
-a cup of coffee PBNTK2AApqLETnSkL4pNq1XaMjJnTySt8j
 
 Cheers !
